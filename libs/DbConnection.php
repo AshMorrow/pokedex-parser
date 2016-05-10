@@ -18,7 +18,7 @@ class DbConnection
      */
     private function __construct()
     {
-        $this->pdo = new PDO("mysql:host=127.0.0.1;dbname=pokedex",'root','1111');
+        $this->pdo = new PDO("mysql:host=stellash.mysql.ukraine.com.ua;dbname=stellash_pokedex",'stellash_pokedex','wkj63qwc');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
         $this->pdo->exec('SET NAMES utf8');
     }
