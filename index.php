@@ -1,14 +1,19 @@
 <?php
-require_once 'libs/simple_html_dom.php';
+require_once __DIR__.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'simple_html_dom.php';
+use PokedexData;
+
+function getDescription($html){
+    $ret = $html->find('.version-descriptions',0);
+    PokedexData::$descriptionX = $ret->children(1);
+    PokedexData::$descriptionY = $ret->children(2);
+}
+
 
 $html = file_get_html('http://www.pokemon.com/ru/pokedex/blastoise');
-$rez = $html->find('.pokedex-pokemon-details ul');
-$indo = $html->find('.pokemon-ability-info ul');
-$text = $html->find('text');
-foreach($indo as $element){
-    echo $element->next_sibling();
-//    $get_abil = $indk
-}
+
+getDescription($html);
+
+echo PokedexData::$descriptionX;
 //var_dump($text,$indo);
 //print_r(PDO::getAvailableDrivers());
 
