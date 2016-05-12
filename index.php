@@ -1,19 +1,47 @@
 <?php
 require_once __DIR__.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'simple_html_dom.php';
-use PokedexData;
-
+include 'libs'.DIRECTORY_SEPARATOR.'PokedexData.php';
 function getDescription($html){
     $ret = $html->find('.version-descriptions',0);
     PokedexData::$descriptionX = $ret->children(1);
     PokedexData::$descriptionY = $ret->children(2);
 }
 
+function getPokeDtm($html,$dtm){
+    /**
+     *  получаем type или weknesses
+     *  в $dtm передается  часть названия класса
+     */
+    $ret = $html->find(".dtm-{$dtm} ul",0);
+    $i=0;
+    $poke_type = '';
+    while($ret->children($i)){
+        $poke_type .= $ret->children($i)->plaintext.'/';
+        $i++;
+    }
+    return $poke_type;
+}
 
-$html = file_get_html('http://www.pokemon.com/ru/pokedex/blastoise');
+function getPokeEvolution($html){
+    $ret = $html->find('ul.match-height-tablet span.pokemon-number');
+    $evolution_id = '';
+    foreach($ret as $element){
+        $evolution_id .= str_ireplace('#','',$element->plaintext).'/';
+    }
+
+    return $evolution_id;
+
+}
+
+$html = file_get_html('http://www.pokemon.com/ru/pokedex/venusaur');
 
 getDescription($html);
-
+echo getPokeDtm($html,'type');
+echo getPokeDtm($html,'weaknesses');
+echo getPokeEvolution($html);
 echo PokedexData::$descriptionX;
+
+
 //var_dump($text,$indo);
 //print_r(PDO::getAvailableDrivers());
 
