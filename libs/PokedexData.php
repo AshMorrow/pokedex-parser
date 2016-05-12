@@ -1,5 +1,4 @@
 <?php
-namespace podexData;
 /**
  * Created by PhpStorm.
  * User: koragg
