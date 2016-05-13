@@ -40,6 +40,14 @@ function getPokeStatus($html){
     }
 }
 
+function getPokeAbility($html){
+    $l_ret = $html->find('span.attribute-value'); //рост.вес.пол
+    foreach ($l_ret as $element){
+        echo $element->plaintext;
+    }
+
+}
+
 
 
 $html = file_get_html('http://www.pokemon.com/ru/pokedex/venusaur');
@@ -49,7 +57,45 @@ echo getPokeDtm($html,'type');
 echo getPokeDtm($html,'weaknesses');
 echo getPokeEvolution($html);
 getPokeStatus($html);
+getPokeAbility($html);
 echo PokedexData::$descriptionX;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //var_dump($text,$indo);
