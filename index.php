@@ -33,12 +33,22 @@ function getPokeEvolution($html){
 
 }
 
+function getPokeStatus($html){
+    $ret = $html->find('div[class=pokemon-stats-info active] ul.gauge li.meter');
+    foreach ($ret as $item) {
+       echo $item->getAttribute('data-value');
+    }
+}
+
+
+
 $html = file_get_html('http://www.pokemon.com/ru/pokedex/venusaur');
 
 getDescription($html);
 echo getPokeDtm($html,'type');
 echo getPokeDtm($html,'weaknesses');
 echo getPokeEvolution($html);
+getPokeStatus($html);
 echo PokedexData::$descriptionX;
 
 
