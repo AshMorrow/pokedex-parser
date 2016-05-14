@@ -1,67 +1,29 @@
 <?php
-require_once __DIR__.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'simple_html_dom.php';
+include __DIR__.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'simple_html_dom.php';
 include 'libs'.DIRECTORY_SEPARATOR.'PokedexData.php';
-function getDescription($html){
-    $ret = $html->find('.version-descriptions',0);
-    PokedexData::$descriptionX = $ret->children(1);
-    PokedexData::$descriptionY = $ret->children(2);
-}
+include 'libs'.DIRECTORY_SEPARATOR.'PokemonGetData.php';
 
-function getPokeDtm($html,$dtm){
-    /**
-     *  получаем type или weknesses
-     *  в $dtm передается  часть названия класса
-     */
-    $ret = $html->find(".dtm-{$dtm} ul",0);
-    $i=0;
-    $poke_type = '';
-    while($ret->children($i)){
-        $poke_type .= $ret->children($i)->plaintext.'/';
-        $i++;
-    }
-    return $poke_type;
-}
+$pokedex = new PokemonGetData();
 
-function getPokeEvolution($html){
-    $ret = $html->find('ul.match-height-tablet span.pokemon-number');
-    $evolution_id = '';
-    foreach($ret as $element){
-        $evolution_id .= str_ireplace('#','',$element->plaintext).'/';
-    }
+$html = file_get_html('http://www.pokemon.com/ru/pokedex/hoopa');
 
-    return $evolution_id;
+//$pokedex->getDescription($html);
+$pokedex->getAllData($html);
 
-}
-
-function getPokeStatus($html){
-    $ret = $html->find('div[class=pokemon-stats-info active] ul.gauge li.meter');
-    foreach ($ret as $item) {
-       echo $item->getAttribute('data-value');
-    }
-}
-
-function getPokeAbility($html){
-    $l_ret = $html->find('span.attribute-value'); //рост.вес.пол
-    foreach ($l_ret as $element){
-        echo $element->plaintext;
-    }
-
-}
-
-
-
-$html = file_get_html('http://www.pokemon.com/ru/pokedex/venusaur');
-
-getDescription($html);
-echo getPokeDtm($html,'type');
-echo getPokeDtm($html,'weaknesses');
-echo getPokeEvolution($html);
-getPokeStatus($html);
-getPokeAbility($html);
-echo PokedexData::$descriptionX;
-
-
-
+echo PokedexData::$descriptionX.'<br>';
+echo PokedexData::$descriptionY.'<br>';
+echo PokedexData::$height.'<br>';
+echo PokedexData::$weight.'<br>';
+echo PokedexData::$gender.'<br>';
+echo PokedexData::$category.'<br>';
+echo PokedexData::$abilities.'<br>';
+echo PokedexData::$hp.'<br>';
+echo PokedexData::$attack.'<br>';
+echo PokedexData::$defense.'<br>';
+echo PokedexData::$special_attack.'<br>';
+echo PokedexData::$special_defense.'<br>';
+echo PokedexData::$speed.'<br>';
+echo PokedexData::$pokemon_id.'<br>';
 
 
 
