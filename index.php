@@ -5,11 +5,13 @@ include 'libs'.DIRECTORY_SEPARATOR.'PokemonGetData.php';
 
 $pokedex = new PokemonGetData();
 
-$html = file_get_html('http://www.pokemon.com/ru/pokedex/hoopa');
+$html = file_get_html('http://www.pokemon.com/ru/pokedex/blastoise');
 
 //$pokedex->getDescription($html);
 $pokedex->getAllData($html);
 
+echo PokedexData::$name.'<br>';
+echo PokedexData::$pokemon_id.'<br>';
 echo PokedexData::$descriptionX.'<br>';
 echo PokedexData::$descriptionY.'<br>';
 echo PokedexData::$height.'<br>';
@@ -17,13 +19,15 @@ echo PokedexData::$weight.'<br>';
 echo PokedexData::$gender.'<br>';
 echo PokedexData::$category.'<br>';
 echo PokedexData::$abilities.'<br>';
+echo PokedexData::$type.'<br>';
+echo PokedexData::$weaknesses.'<br>';
+echo PokedexData::$evolutions.'<br>';
 echo PokedexData::$hp.'<br>';
 echo PokedexData::$attack.'<br>';
 echo PokedexData::$defense.'<br>';
 echo PokedexData::$special_attack.'<br>';
 echo PokedexData::$special_defense.'<br>';
 echo PokedexData::$speed.'<br>';
-echo PokedexData::$pokemon_id.'<br>';
 
 
 
