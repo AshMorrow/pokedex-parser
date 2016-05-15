@@ -40,7 +40,7 @@ class PokemonGetData extends Libs
 
     }
 
-    function getPokeEvolution($html){
+    public function getPokeEvolution($html){
         $ret = $html->find('ul.match-height-tablet span.pokemon-number');
         $evolution_id = '';
         foreach($ret as $element){
@@ -51,7 +51,7 @@ class PokemonGetData extends Libs
 
     }
 
-    function getPokeStatus($html){
+    public function getPokeStatus($html){
         $status = [];
         $ret = $html->find('div[class=pokemon-stats-info active] ul.gauge li.meter');
         foreach ($ret as $item) {
@@ -66,7 +66,7 @@ class PokemonGetData extends Libs
         PokedexData::set('speed', $status[5]);
     }
 
-    function getPokeAbility($html){
+    public function getPokeAbility($html){
         $abil_name = [
             'Рост'=>'',
             'Вес'=>'',
@@ -109,9 +109,10 @@ class PokemonGetData extends Libs
         PokedexData::set('abilities', self::clear_line($abil_name['Таланты']));
     }
 
-    function getNextPage($html){
-        foreach($html->find('a.next') as $element)
+    public static function getNextPage($html){
+        foreach($html->find('a.next') as $element){
             return $element->href;
+        }
     }
     /**
      * @param $html

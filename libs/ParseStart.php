@@ -11,7 +11,21 @@ use libs\PokedexData;
 use libs\PokemonGetData;
 use model\PokedexModel;
 
-class ParseStart
+abstract class ParseStart
 {
+    public static function start(){
+        $html = file_get_html('http://www.pokemon.com/ru/pokedex/bulbasaur');
+        $pokedex = new PokemonGetData();
+        $save_data = new PokedexModel();
+        $count = 0;
+        do{
+            $next = PokemonGetData::getNextPage($html);
+            echo $next;
+            $pokedex->getAllData($html);
+            $html = file_get_html('http://www.pokemon.com'.$next);
+            $save_data->save(PokedexData::get_all());
+            echo $count++;
 
+        }while($next != '/ru/pokedex/bulbasaur');
+    }
 }

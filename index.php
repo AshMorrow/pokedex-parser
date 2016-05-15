@@ -1,6 +1,7 @@
 <?php
 use libs\PokedexData;
 use libs\PokemonGetData;
+use libs\ParseStart;
 
 include __DIR__.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'simple_html_dom.php';
 
@@ -8,13 +9,14 @@ function __autoload($name){
     $cn = str_ireplace('\\','/',$name);
     include $cn.'.php';
 }
+include 'view'.DIRECTORY_SEPARATOR.'default_layout.phtml';
+if(isset($_POST['submit'])){
+    ParseStart::start();
+}
+//$pokedex = new PokemonGetData();
+//$pokedex->getAllData($html);
 
-$html = file_get_html('http://www.pokemon.com/ru/pokedex/blastoise');
-
-$pokedex = new PokemonGetData();
-$pokedex->getAllData($html);
-
-var_dump(PokedexData::get_all());
+//var_dump(PokedexData::get_all());
 
 
 
