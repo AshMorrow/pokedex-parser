@@ -1,28 +1,27 @@
 <?php
+namespace libs;
 /**
  * Created by PhpStorm.
  * User: koragg
  * Date: 11.05.16
  * Time: 16:11
  */
-class PokedexData
+abstract class PokedexData
 {
-    public static $name;
-    public static $descriptionX;
-    public static $descriptionY;
-    public static $height;
-    public static $weight;
-    public static $gender;
-    public static $category;
-    public static $abilities;
-    public static $hp;
-    public static $attack;
-    public static $defense;
-    public static $special_attack;
-    public static $special_defense;
-    public static $speed;
-    public static $type;
-    public static $weaknesses;
-    public static $evolutions;
-    public static $pokemon_id;
+    private static $pokemon_data=['id'=>null];
+
+    public static function set($key,$value){
+        self::$pokemon_data[$key] = $value;
+    }
+
+    public static function get($key){
+        if(isset(self::$pokemon_data[$key])){
+            return self::$pokemon_data[$key];
+        }
+    }
+
+    public static function get_all(){
+        return self::$pokemon_data;
+    }
+
 }

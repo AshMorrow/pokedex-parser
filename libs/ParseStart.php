@@ -13,5 +13,5 @@ use model\PokedexModel;
 
 class ParseStart
 {
-    
+
 }

@@ -1,25 +1,25 @@
 <?php
-class PokemonGetData extends simple_html_dom
+namespace libs;
+
+class PokemonGetData extends Libs
 {
     public function getPokeId($html){
-//        $ret = $html->find('span[id=pokemonID]',0)->prev_sibling(1);
         $ret = $html->find('.pokedex-pokemon-pagination-title',0);
-        //echo $ret->prev_sibling()->outertext;
         $text = (string)$ret->outertext;
-        $text = explode('№',strip_tags($text));
-        PokedexData::$name = trim($text[0]);
-        PokedexData::$pokemon_id = trim($text[1]);
+        $text = explode('№', self::clear_line($text));
+        PokedexData::set('name',self::clear_line($text[0]));
+        PokedexData::set('pokemon_id',self::clear_line($text[1]));
     }
 
     public function getDescription($html){
         $ret = $html->find('.version-descriptions',0);
-        PokedexData::$descriptionX = $ret->children(0);
-        PokedexData::$descriptionY = $ret->children(1);
+        PokedexData::set('descriptionX', self::clear_line($ret->children(0)));
+        PokedexData::set('descriptionY', self::clear_line($ret->children(1)));
     }
 
     public function getPokeDtm($html){
         /**
-         *  получаем type или weknesses
+         *  получаем type и weknesses
          */
 
         $data_arr = [
@@ -32,10 +32,10 @@ class PokemonGetData extends simple_html_dom
             $i=0;
             $poke_type = '';
             while($ret->children($i)){
-                $poke_type .= $ret->children($i)->plaintext.'/';
+                $poke_type .= self::clear_line($ret->children($i)->plaintext).'/';
                 $i++;
             }
-            PokedexData::${$data_arr[$c]} = $poke_type;
+            PokedexData::set($data_arr[$c], substr($poke_type,0,-1));
         }
 
     }
@@ -44,10 +44,10 @@ class PokemonGetData extends simple_html_dom
         $ret = $html->find('ul.match-height-tablet span.pokemon-number');
         $evolution_id = '';
         foreach($ret as $element){
-            $evolution_id .= str_ireplace('#','',$element->plaintext).'/';
+            $evolution_id .= str_ireplace('#','',self::clear_line($element->plaintext)).'/';
         }
 
-        PokedexData::$evolutions = $evolution_id;
+        PokedexData::set('evolutions', substr($evolution_id,0,-1));
 
     }
 
@@ -55,14 +55,15 @@ class PokemonGetData extends simple_html_dom
         $status = [];
         $ret = $html->find('div[class=pokemon-stats-info active] ul.gauge li.meter');
         foreach ($ret as $item) {
-            $status[] =  $item->getAttribute('data-value');
+            $status[] =  self::clear_line($item->getAttribute('data-value'));
         }
-        PokedexData::$hp = $status[0];
-        PokedexData::$attack = $status[1];
-        PokedexData::$defense = $status[2];
-        PokedexData::$special_attack = $status[3];
-        PokedexData::$special_defense = $status[4];
-        PokedexData::$speed = $status[5];
+        // В общем было лень загонять в цикл
+        PokedexData::set('hp', $status[0]);
+        PokedexData::set('attack', $status[1]);
+        PokedexData::set('defense', $status[2]);
+        PokedexData::set('special_attack', $status[3]);
+        PokedexData::set('special_defense', $status[4]);
+        PokedexData::set('speed', $status[5]);
     }
 
     function getPokeAbility($html){
@@ -101,13 +102,21 @@ class PokemonGetData extends simple_html_dom
         if($abil_name['Пол']=='Неизвестно'){
             $abil_name['Пол'] = 'unknown';
         }
-        PokedexData::$height = $abil_name['Рост'];
-        PokedexData::$weight = $abil_name['Вес'];
-        PokedexData::$gender = $abil_name['Пол'];
-        PokedexData::$category = $abil_name['Вид'];
-        PokedexData::$abilities = $abil_name['Таланты'];
+        PokedexData::set('height', self::clear_line($abil_name['Рост']));
+        PokedexData::set('weight', self::clear_line($abil_name['Вес']));
+        PokedexData::set('gender', self::clear_line($abil_name['Пол']));
+        PokedexData::set('category', self::clear_line($abil_name['Вид']));
+        PokedexData::set('abilities', self::clear_line($abil_name['Таланты']));
     }
 
+    function getNextPage($html){
+        foreach($html->find('a.next') as $element)
+            return $element->href;
+    }
+    /**
+     * @param $html
+     * вызывает все методы;
+     */
     public function getAllData($html){
        self::getPokeId($html);
        self::getDescription($html);

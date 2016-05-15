@@ -1,33 +1,21 @@
 <?php
-include __DIR__.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'simple_html_dom.php';
-include 'libs'.DIRECTORY_SEPARATOR.'PokedexData.php';
-include 'libs'.DIRECTORY_SEPARATOR.'PokemonGetData.php';
+use libs\PokedexData;
+use libs\PokemonGetData;
 
-$pokedex = new PokemonGetData();
+include __DIR__.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'simple_html_dom.php';
+
+function __autoload($name){
+    $cn = str_ireplace('\\','/',$name);
+    include $cn.'.php';
+}
 
 $html = file_get_html('http://www.pokemon.com/ru/pokedex/blastoise');
 
-//$pokedex->getDescription($html);
+$pokedex = new PokemonGetData();
 $pokedex->getAllData($html);
 
-echo PokedexData::$name.'<br>';
-echo PokedexData::$pokemon_id.'<br>';
-echo PokedexData::$descriptionX.'<br>';
-echo PokedexData::$descriptionY.'<br>';
-echo PokedexData::$height.'<br>';
-echo PokedexData::$weight.'<br>';
-echo PokedexData::$gender.'<br>';
-echo PokedexData::$category.'<br>';
-echo PokedexData::$abilities.'<br>';
-echo PokedexData::$type.'<br>';
-echo PokedexData::$weaknesses.'<br>';
-echo PokedexData::$evolutions.'<br>';
-echo PokedexData::$hp.'<br>';
-echo PokedexData::$attack.'<br>';
-echo PokedexData::$defense.'<br>';
-echo PokedexData::$special_attack.'<br>';
-echo PokedexData::$special_defense.'<br>';
-echo PokedexData::$speed.'<br>';
+var_dump(PokedexData::get_all());
+
 
 
 
