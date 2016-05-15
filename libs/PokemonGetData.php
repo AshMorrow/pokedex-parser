@@ -5,7 +5,10 @@ class PokemonGetData extends simple_html_dom
 //        $ret = $html->find('span[id=pokemonID]',0)->prev_sibling(1);
         $ret = $html->find('.pokedex-pokemon-pagination-title',0);
         //echo $ret->prev_sibling()->outertext;
-        PokedexData::$pokemon_id = preg_replace('(/[^=]*$/)','',$ret->outertext);
+        $text = (string)$ret->outertext;
+        $text = explode('№',strip_tags($text));
+        PokedexData::$name = trim($text[0]);
+        PokedexData::$pokemon_id = trim($text[1]);
     }
 
     public function getDescription($html){
@@ -14,19 +17,27 @@ class PokemonGetData extends simple_html_dom
         PokedexData::$descriptionY = $ret->children(1);
     }
 
-    public function getPokeDtm($html,$dtm){
+    public function getPokeDtm($html){
         /**
          *  получаем type или weknesses
-         *  в $dtm передается  часть названия класса
          */
-        $ret = $html->find(".dtm-{$dtm} ul",0);
-        $i=0;
-        $poke_type = '';
-        while($ret->children($i)){
-            $poke_type .= $ret->children($i)->plaintext.'/';
-            $i++;
+
+        $data_arr = [
+            'weaknesses',
+            'type'
+        ];
+        for($c=0;$c<count($data_arr);$c++){
+
+            $ret = $html->find(".dtm-{$data_arr[$c]} ul",0);
+            $i=0;
+            $poke_type = '';
+            while($ret->children($i)){
+                $poke_type .= $ret->children($i)->plaintext.'/';
+                $i++;
+            }
+            PokedexData::${$data_arr[$c]} = $poke_type;
         }
-        return $poke_type;
+
     }
 
     function getPokeEvolution($html){
@@ -36,7 +47,7 @@ class PokemonGetData extends simple_html_dom
             $evolution_id .= str_ireplace('#','',$element->plaintext).'/';
         }
 
-        return $evolution_id;
+        PokedexData::$evolutions = $evolution_id;
 
     }
 
@@ -100,8 +111,7 @@ class PokemonGetData extends simple_html_dom
     public function getAllData($html){
        self::getPokeId($html);
        self::getDescription($html);
-       self::getPokeDtm($html,'type');
-       self::getPokeDtm($html,'weaknesses');
+       self::getPokeDtm($html);
        self::getPokeEvolution($html);
        self::getPokeStatus($html);
        self::getPokeAbility($html);
