@@ -109,6 +109,24 @@ class PokemonGetData extends Libs
         PokedexData::set('abilities', self::clear_line($abil_name['Таланты']));
     }
 
+    public static function getImage($type){
+        $d_name = $type;
+        if(!self::checkDir($d_name)){
+            mkdir($d_name);
+        }
+        for($i = 1; $i<=720;$i++){
+            if($i<10){
+                $num = '00'.$i;
+            }elseif($i>9 AND $i<100){
+                $num = '0'.$i;
+            }else{
+                $num = $i;
+            }
+            copy("http://assets.pokemon.com/assets/cms2/img/pokedex/{$type}/{$num}.png",$d_name.DIRECTORY_SEPARATOR
+                .$num.'.png');
+        }
+    }
+
     public static function getNextPage($html){
         foreach($html->find('a.next') as $element){
             return $element->href;

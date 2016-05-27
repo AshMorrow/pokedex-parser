@@ -14,4 +14,7 @@ abstract class Libs
     public function clear_line($srt){
         return trim(strip_tags($srt));
     }
+    public function checkDir($d_name){
+        return is_dir($d_name);
+    }
 }

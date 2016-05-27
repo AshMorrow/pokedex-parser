@@ -10,9 +10,15 @@ function __autoload($name){
     include $cn.'.php';
 }
 include 'view'.DIRECTORY_SEPARATOR.'default_layout.phtml';
-if(isset($_POST['submit'])){
+if(isset($_POST['submit_data'])){
     ParseStart::start();
+}elseif(isset($_POST['submit_s_img'])){
+    PokemonGetData::getImage('detail');
+}elseif(isset($_POST['submit_b_img'])){
+    PokemonGetData::getImage('full');
 }
+
+
 //$pokedex = new PokemonGetData();
 //$pokedex->getAllData($html);
 
